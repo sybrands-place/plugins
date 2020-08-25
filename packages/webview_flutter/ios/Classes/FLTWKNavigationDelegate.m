@@ -22,6 +22,53 @@
   [_methodChannel invokeMethod:@"onPageStarted" arguments:@{@"url" : webView.URL.absoluteString}];
 }
 
+- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    
+    [_methodChannel invokeMethod:@"onBasicAuthRequest" arguments:@{@"url" : webView.URL.absoluteString} result:^(id _Nullable result) {
+        if (result == nil) {
+            NSLog(@"onBasicAuthRequest did not return credentials, "
+                  @"ignoring auth request.");
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+            return;
+        }
+        if ([result isKindOfClass:[FlutterError class]]) {
+            NSLog(@"onBasicAuthRequest has unexpectedly completed with an error, "
+                  @"ignoring auth request.");
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+            return;
+        }
+        if (result == FlutterMethodNotImplemented) {
+            NSLog(@"onBasicAuthRequest was unexepectedly not implemented: %@, "
+                  @"ignoring auth request.",
+                  result);
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+            return;
+        }
+        if (![result isKindOfClass:[NSString class]]) {
+            NSLog(@"onBasicAuthRequest unexpectedly returned a non string value: "
+                  @"%@, ignoring auth request",
+                  result);
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+            return;
+        }
+            
+        NSArray *components = [result componentsSeparatedByString:@":"];
+        if (components.count != 2) {
+            NSLog(@"onBasicAuthRequest unexpectedly returned a invalid value: "
+                    @"%@, ignoring auth request",
+                    result);
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+            return;
+        }
+        
+        completionHandler(NSURLSessionAuthChallengeUseCredential,
+                          [NSURLCredential credentialWithUser:components[0] password:components[1] persistence:NSURLCredentialPersistenceForSession]);
+      
+    }];
+
+    
+}
+
 - (void)webView:(WKWebView *)webView
     decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
                     decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {

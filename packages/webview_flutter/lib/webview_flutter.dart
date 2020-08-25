@@ -73,6 +73,9 @@ enum NavigationDecision {
 typedef FutureOr<NavigationDecision> NavigationDelegate(
     NavigationRequest navigation);
 
+/// Return basic auth credentials like {username}:{password} if needed.
+typedef FutureOr<String> BasicAuthCallback(String url);
+
 /// Signature for when a [WebView] has started loading a page.
 typedef void PageStartedCallback(String url);
 
@@ -150,6 +153,7 @@ class WebView extends StatefulWidget {
     this.gestureRecognizers,
     this.onPageStarted,
     this.onPageFinished,
+    this.onBasicAuthRequest,
     this.onWebResourceError,
     this.debuggingEnabled = false,
     this.gestureNavigationEnabled = false,
@@ -265,6 +269,9 @@ class WebView extends StatefulWidget {
   ///       webview, and frames will be opened in the main frame.
   ///     * When a navigationDelegate is set HTTP requests do not include the HTTP referer header.
   final NavigationDelegate navigationDelegate;
+
+  /// Invoken when request asks for basic authentication
+  final BasicAuthCallback onBasicAuthRequest;
 
   /// Invoked when a page starts loading.
   final PageStartedCallback onPageStarted;
@@ -507,6 +514,14 @@ class _PlatformCallbacksHandler implements WebViewPlatformCallbacksHandler {
     for (JavascriptChannel channel in channels) {
       _javascriptChannels[channel.name] = channel;
     }
+  }
+
+  @override
+  FutureOr<String> onBasicAuthRequest(String url) {
+    if (_widget.onBasicAuthRequest != null) {
+      return _widget.onBasicAuthRequest(url);
+    }
+    return null;
   }
 }
 
