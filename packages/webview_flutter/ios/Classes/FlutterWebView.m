@@ -432,6 +432,7 @@
 - (void)updateUserAgent:(NSString*)userAgent {
   if (@available(iOS 9.0, *)) {
     [_webView setCustomUserAgent:userAgent];
+    NSLog(@"WebView UserAgent is set to: %@", userAgent);
   } else {
     NSLog(@"Updating UserAgent is not supported for Flutter WebViews prior to iOS 9.");
   }
