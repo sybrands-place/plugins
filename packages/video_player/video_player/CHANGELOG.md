@@ -1,3 +1,15 @@
+## 0.11.1+4
+
+* Add `toString()` to `Caption`.
+
+## 0.11.1+3
+
+* Android: Upgrade ExoPlayer to 2.12.1.
+
+## 0.11.1+2
+
+* Update android compileSdkVersion to 29.
+
 ## 0.11.1+1
 
 * Fixed uncanceled timers when calling `play` on the controller multiple times before `pause`, which
