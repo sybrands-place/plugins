@@ -1,3 +1,11 @@
+## 2.0.1
+
+* Update platform_plugin_interface version requirement.
+
+## 2.0.0
+
+* Migrate to null safety.
+
 ## 1.0.11
 
 * Update the example app: remove the deprecated `RaisedButton` and `FlatButton` widgets.
