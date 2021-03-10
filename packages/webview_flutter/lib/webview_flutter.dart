@@ -354,7 +354,7 @@ class WebView extends StatefulWidget {
   final bool allowsInlineMediaPlayback;
 
   /// Invoken when request asks for basic authentication
-  final BasicAuthCallback onBasicAuthRequest;
+  final BasicAuthCallback? onBasicAuthRequest;
 
   /// Invoked when a page starts loading.
   final PageStartedCallback? onPageStarted;
