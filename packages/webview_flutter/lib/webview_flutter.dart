@@ -618,9 +618,10 @@ class _PlatformCallbacksHandler implements WebViewPlatformCallbacksHandler {
   }
 
   @override
-  FutureOr<String> onBasicAuthRequest(String url) {
-    if (_widget.onBasicAuthRequest != null) {
-      return _widget.onBasicAuthRequest(url);
+  FutureOr<String>? onBasicAuthRequest(String url) {
+    final req = _widget.onBasicAuthRequest;
+    if (req != null) {
+      return req(url);
     }
     return null;
   }
