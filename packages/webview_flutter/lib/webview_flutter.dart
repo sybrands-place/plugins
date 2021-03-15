@@ -140,7 +140,7 @@ typedef FutureOr<NavigationDecision> NavigationDelegate(
     NavigationRequest navigation);
 
 /// Return basic auth credentials like {username}:{password} if needed.
-typedef FutureOr<String> BasicAuthCallback(String url);
+typedef FutureOr<String?> BasicAuthCallback(String url);
 
 /// Signature for when a [WebView] has started loading a page.
 typedef void PageStartedCallback(String url);
@@ -618,9 +618,9 @@ class _PlatformCallbacksHandler implements WebViewPlatformCallbacksHandler {
   }
 
   @override
-  FutureOr<String> onBasicAuthRequest(String url) {
+  FutureOr<String?> onBasicAuthRequest(String url) {
     if (_widget.onBasicAuthRequest != null) {
-      return _widget.onBasicAuthRequest(url);
+      return _widget.onBasicAuthRequest!(url);
     }
     return null;
   }

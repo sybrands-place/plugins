@@ -38,7 +38,7 @@ abstract class WebViewPlatformCallbacksHandler {
   void onWebResourceError(WebResourceError error);
 
   /// return {username}:{password} as basic auth credentials
-  FutureOr<String> onBasicAuthRequest(String url);
+  FutureOr<String?> onBasicAuthRequest(String url);
 }
 
 /// Possible error type categorizations used by [WebResourceError].
