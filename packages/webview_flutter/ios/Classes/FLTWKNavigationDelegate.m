@@ -24,7 +24,7 @@
 
 - (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
     
-    [_methodChannel invokeMethod:@"onBasicAuthRequest" arguments:@{@"url" : webView.URL.absoluteString} result:^(id _Nullable result) {
+    [_methodChannel invokeMethod:@"onBasicAuthRequest" arguments:@{@"url" : [NSString stringWithFormat:@"%@", webView.URL.absoluteString]} result:^(id _Nullable result) {
         if (result == nil) {
             NSLog(@"onBasicAuthRequest did not return credentials, "
                   @"ignoring auth request.");
